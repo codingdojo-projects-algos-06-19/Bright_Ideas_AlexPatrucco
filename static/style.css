@@ -1,0 +1,7 @@
+.post_box {
+    width: 350px;
+    height: 100px;
+    border: 2px solid black;
+    overflow: auto;
+    resize: none;
+}
