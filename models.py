@@ -5,7 +5,7 @@ from config import db, bcrypt, migrate
 import re
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
     # Password requires 5-10 characters length, capital and lowercase letters, and special characters.
-PASSWORD_REGEX = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{5,14}$')
+PASSWORD_REGEX = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,16}$')
 
 likes = db.Table('likes', 
         db.Column('user_id', db.Integer,
@@ -23,6 +23,54 @@ class Users(db.Model):
     email = db.Column(db.String(45))
     password = db.Column(db.String(255))
     liked_ideas = db.relationship('Ideas', secondary=likes)
+    @classmethod
+    def validate_registration(cls, user_info):
+        is_valid = True
+        if len(user_info['name']) < 1:
+            is_valid = False
+            flash('Please enter your name.', 'danger')
+        if len(user_info['alias']) < 1:
+            is_valid = False
+            flash('Please enter an alias.', 'danger')
+        elif len(user_info['alias']) > 0:
+            for user in cls.query.all():
+                if user.alias == user_info['alias']:
+                    is_valid = False
+                    flash('Alias already exists.', 'info')
+        if len(user_info['email']) < 1:
+            is_valid = False
+            flash('Please enter an email address.', 'danger')
+        elif not EMAIL_REGEX.match(user_info['email']):
+            is_valid = False
+            flash('Please enter a valid email address.', 'danger')
+        elif EMAIL_REGEX.match(user_info['email']):
+            for user in cls.query.all():
+                if user.email == user_info['email']:
+                    is_valid = False
+                    flash('Email address already registered.', 'info')
+        if len(user_info['pass']) < 1:
+            is_valid = False
+            flash('Please enter a password', 'danger')
+        elif not PASSWORD_REGEX.match(user_info['pass']):
+            is_valid = False
+            flash('Password does not meet complexity requirements.', 'danger')
+        elif user_info['pass'] != user_info['cpass']:
+            is_valid = False
+            flash('Passwords do not match.', 'danger')
+        # if current_user.password != user_info['pass']:
+        #     is_valid = False
+        #     flash('Email address or password is invalid.', 'danger')
+        return is_valid
+    @classmethod
+    def register_user(cls, user_info):
+        encrypted_pw = bcrypt.generate_password_hash(user_info['pass'])
+        new_user = cls(name=user_info['name'], alias=user_info['email'], password=encrypted_pw)
+        db.session.add(new_user)
+        db.session.commit()
+        for user in cls.query.all():
+            if user.email == new_user.email:
+                session['userid'] = user.id
+        
 
 
 class Ideas(db.Model):
