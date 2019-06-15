@@ -57,9 +57,32 @@ class Users(db.Model):
         elif user_info['pass'] != user_info['cpass']:
             is_valid = False
             flash('Passwords do not match.', 'danger')
-        # if current_user.password != user_info['pass']:
-        #     is_valid = False
-        #     flash('Email address or password is invalid.', 'danger')
+        return is_valid
+    @classmethod
+    def validate_login(cls, user_info):
+        is_valid = True
+        match = 0
+        if len(user_info['email']) < 1:
+            is_valid=False
+            flash("Please enter your email address.", "danger")
+        elif len(user_info['pass']) < 1:
+            is_valid=False
+            flash("Please enter your password.", "danger")
+        elif not EMAIL_REGEX.match(user_info['email']):
+            is_valid=False
+            flash("Please enter a valid email address.", "danger")
+        else:
+            for user in cls.query.all():
+                if user.email == user_info['email']:
+                    match += 1
+                    session['userid'] = user.id
+            if match < 1:
+                is_valid=False
+                flash("Email address is not registered.", "danger")
+            elif match > 1:
+                if not bcrypt.check_password_hash(cls.query.get(session['userid']), user_info['pass']):
+                    is_valid=False
+                    flash("Incorrect username or password.", "danger")
         return is_valid
     @classmethod
     def register_user(cls, user_info):
