@@ -9,6 +9,28 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    
+    <div class="row">
+        <div class="col-sm-12">
+            <nav class="navbar narbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand" href="/bright_ideas">Bright Ideas</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 userinfo">
+                <p>Name: {{ user.name }}</p>
+                <p>Alias: {{ user.alias }}</p>
+                <p>Email: {{ user.email }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 postinfo">
+                <p>Total number of posts: {{ user_posts }}</p>
+                <p>Total number of likes: Working on getting this up.</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

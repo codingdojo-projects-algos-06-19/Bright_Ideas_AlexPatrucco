@@ -30,10 +30,8 @@ def bright_ideas():
         all_posts = Ideas.query.all()
         all_users = Users.query.all()
         for user in all_users:
-            print(user)
             if user.id == session['userid']:
                 current_user = user
-                print(current_user)
             else:
                 continue
         return render_template('bright_ideas.html', user=current_user, all_users=all_users, posts=all_posts)
@@ -46,6 +44,25 @@ def post_idea():
         if is_valid:
             Ideas.add_post(request.form)
     return redirect('/bright_ideas')
+
+# User Profile
+
+def user_view(id):
+    if 'userid' in session:
+        post_count = 0
+        all_users = Users.query.all()
+        all_posts = Ideas.query.all()
+        for user in all_users:
+            if user.id == int(id):
+                current_user = user
+            else:
+                continue
+        for post in all_posts:
+            if post.author == int(id):
+                post_count += 1
+        return render_template('user_view.html', user=current_user, all_posts=all_posts, all_users=all_users, user_posts=post_count)
+    else:
+        return redirect('/')
 
 
 # Logout

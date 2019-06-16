@@ -9,15 +9,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-9">
-                <h4>Hi {{user.alias}}!</h4>
-            </div>
-            <div class="col">
+    <div class="row">
+        <div class="col-sm-12">
+            <nav class="navbar narbar-expand-lg navbar-dark bg-dark">
+                <a href="/bright_ideas" class="navbar-brand disabled">Hi {{user.alias}}!</a>
                 <a href="/logout">Logout</a>
-            </div>
+            </nav>
         </div>
+    </div>
+    <div class="container">
         <form action="/post_idea" method="POST">
             <div class="form-row">
                 <div class="form-group col-sm-9">
