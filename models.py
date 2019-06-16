@@ -119,3 +119,22 @@ class Ideas(db.Model):
         new_post = cls(content=user_info['idea'], author=session['userid'])
         db.session.add(new_post)
         db.session.commit()
+    @classmethod
+    def like(cls, id):
+        idea_count = 0
+        all_users = Users.query.all()
+        current_idea = cls.query.get(int(id))
+        current_user = Users.query.get(session['userid'])
+        for user in all_users:
+            for liked_idea in user.liked_ideas:
+                if liked_idea == current_idea:
+                    idea_count += 1
+        if idea_count > 0:
+            current_idea.users_who_liked.remove(current_user)
+            db.session.commit()
+            flash("Idea unliked.", "info")
+        else:
+            current_idea.users_who_liked.append(current_user)
+            db.session.commit()
+            flash("Idea liked!", "success")
+        

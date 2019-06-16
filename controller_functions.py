@@ -45,6 +45,13 @@ def post_idea():
             Ideas.add_post(request.form)
     return redirect('/bright_ideas')
 
+def like(id):
+    if 'userid' in session:
+        Ideas.like(id)
+        return redirect('/bright_ideas')
+    else:
+        return redirect('/')
+
 # User Profile
 
 def user_view(id):

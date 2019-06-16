@@ -18,6 +18,17 @@
         </div>
     </div>
     <div class="container">
+        <div class="flashes">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <ul class="list-group">
+                        {% for category, message in messages %}
+                            <li class="list-group-item list-group-item-{{category}}">{{message}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
         <form action="/post_idea" method="POST">
             <div class="form-row">
                 <div class="form-group col-sm-9">
@@ -39,9 +50,11 @@
                 </div>
                 <div class="post_box col-sm-6">{{post.content}}</div>
             </div>
-            <div class="row">
+            <div class="row like_bar">
                 <div class="col-sm-4">
-                    <a href="/like/{{post.id}}">Like</a>
+                    {% if user.id != post.author %}
+                        <a href="/like/{{post.id}}">Like</a>
+                    {% endif %}
                 </div>
         <!-- Working on getting the counter to work... -->
                 <div class="col-sm-5">

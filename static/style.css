@@ -3,8 +3,9 @@
 }
 
 .post_box {
+    padding: 5px 10px;
     width: 350px;
-    height: 100px;
+    max-height: 250px;
     border: 2px solid rgba(38, 38, 148, 0.808);
     overflow: auto;
     resize: none;
@@ -16,6 +17,10 @@
 .container form {
     margin: 0px 0px 10px 60px;
     padding-top: 20px;
+}
+
+.like_bar {
+    margin-left: 140px;
 }
 
 .userinfo {
