@@ -28,16 +28,25 @@ def login():
 def bright_ideas():
     if 'userid' in session:
         all_posts = Ideas.query.all()
-        for user in Users.query.all():
+        all_users = Users.query.all()
+        for user in all_users:
             print(user)
             if user.id == session['userid']:
                 current_user = user
                 print(current_user)
             else:
                 continue
-        return render_template('bright_ideas.html', user=current_user, posts=all_posts)
+        return render_template('bright_ideas.html', user=current_user, all_users=all_users, posts=all_posts)
     else:
         return redirect('/')
+
+def post_idea():
+    if 'userid' in session:
+        is_valid = Ideas.post_validation(request.form)
+        if is_valid:
+            Ideas.add_post(request.form)
+    return redirect('/bright_ideas')
+
 
 # Logout
 

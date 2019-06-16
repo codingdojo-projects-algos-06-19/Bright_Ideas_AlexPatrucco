@@ -30,10 +30,14 @@
         </form>
         {% for post in posts %}
             <div class="row">
-                <div class="col-sm-4">
-                    <p><a href="/users/{{user.id}}">{{user.alias}}</a> says: </p>
+                <div class="col-sm-2">
+                    {% for user in all_users %}
+                        {% if user.id == post.author %}
+                            <p><a href="/users/{{user.id}}">{{user.alias}}</a> says: </p>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-                <div class="post_box col-sm-8">{{post.content}}</div>
+                <div class="post_box col-sm-6">{{post.content}}</div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
@@ -41,7 +45,7 @@
                 </div>
         <!-- Working on getting the counter to work... -->
                 <div class="col-sm-5">
-                    <p><a href="/bright_ideas/{{post.id}}">{{}}</a> like this idea.</p>
+                    <p><a href="/bright_ideas/{{post.id}}">Placeholder</a> like this idea.</p>
                 </div>
             </div>
         {% endfor %}

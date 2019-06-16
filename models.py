@@ -75,18 +75,20 @@ class Users(db.Model):
             for user in cls.query.all():
                 if user.email == user_info['email']:
                     match += 1
+                    this_user = user
                     session['userid'] = user.id
-                    if not bcrypt.check_password_hash(user.password, user_info['pass']):
-                        is_valid=False
-                        flash("Incorrect username or password.", "danger")
             if match < 1:
                 is_valid=False
                 flash("Email address is not registered.", "danger")
+            elif match > 0:
+                if not bcrypt.check_password_hash(this_user.password, user_info['pass']):
+                    is_valid=False
+                    flash("Incorrect username or password.", "danger")
         return is_valid
     @classmethod
     def register_user(cls, user_info):
         encrypted_pw = bcrypt.generate_password_hash(user_info['pass'])
-        new_user = cls(name=user_info['name'], email=user_info['email'], password=encrypted_pw)
+        new_user = cls(name=user_info['name'], alias=user_info['alias'], email=user_info['email'], password=encrypted_pw)
         db.session.add(new_user)
         db.session.commit()
         for user in cls.query.all():
@@ -99,4 +101,21 @@ class Ideas(db.Model):
     __tablename__ = "ideas"
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
+    author = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     users_who_liked = db.relationship('Users', secondary=likes)
+    @classmethod
+    def post_validation(cls, user_info):
+        is_valid = True
+        if len(user_info['idea']) < 1:
+            is_valid = False
+            flash("Please enter a post before submitting!", "danger")
+        elif len(user_info['idea']) < 10:
+            is_valid = False
+            flash("Please enter at least 10 characters.", "danger")
+        return is_valid
+    @classmethod
+    def add_post(cls, user_info):
+        flash("Idea posted!", "success")
+        new_post = cls(content=user_info['idea'], author=session['userid'])
+        db.session.add(new_post)
+        db.session.commit()
