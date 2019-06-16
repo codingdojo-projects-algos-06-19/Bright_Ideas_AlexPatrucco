@@ -76,18 +76,17 @@ class Users(db.Model):
                 if user.email == user_info['email']:
                     match += 1
                     session['userid'] = user.id
+                    if not bcrypt.check_password_hash(user.password, user_info['pass']):
+                        is_valid=False
+                        flash("Incorrect username or password.", "danger")
             if match < 1:
                 is_valid=False
                 flash("Email address is not registered.", "danger")
-            elif match > 1:
-                if not bcrypt.check_password_hash(cls.query.get(session['userid']), user_info['pass']):
-                    is_valid=False
-                    flash("Incorrect username or password.", "danger")
         return is_valid
     @classmethod
     def register_user(cls, user_info):
         encrypted_pw = bcrypt.generate_password_hash(user_info['pass'])
-        new_user = cls(name=user_info['name'], alias=user_info['email'], password=encrypted_pw)
+        new_user = cls(name=user_info['name'], email=user_info['email'], password=encrypted_pw)
         db.session.add(new_user)
         db.session.commit()
         for user in cls.query.all():

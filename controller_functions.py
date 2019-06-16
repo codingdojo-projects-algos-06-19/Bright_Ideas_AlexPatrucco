@@ -17,7 +17,7 @@ def register():
         return redirect('/')
 
 def login():
-    is_valid = Users.login_validation(request.form)
+    is_valid = Users.validate_login(request.form)
     if is_valid:
         return redirect('/bright_ideas')
     else:
@@ -29,8 +29,12 @@ def bright_ideas():
     if 'userid' in session:
         all_posts = Ideas.query.all()
         for user in Users.query.all():
+            print(user)
             if user.id == session['userid']:
                 current_user = user
+                print(current_user)
+            else:
+                continue
         return render_template('bright_ideas.html', user=current_user, posts=all_posts)
     else:
         return redirect('/')
