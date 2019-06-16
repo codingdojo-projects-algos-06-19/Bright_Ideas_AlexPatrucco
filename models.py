@@ -129,7 +129,7 @@ class Ideas(db.Model):
             for liked_idea in user.liked_ideas:
                 if liked_idea == current_idea:
                     idea_count += 1
-        if idea_count > 0:
+        if current_user in current_idea.users_who_liked:
             current_idea.users_who_liked.remove(current_user)
             db.session.commit()
             flash("Idea unliked.", "info")

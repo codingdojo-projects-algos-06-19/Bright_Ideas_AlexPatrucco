@@ -61,9 +61,16 @@
                         <a href="/like/{{post.id}}">Like</a>
                     {% endif %}
                 </div>
-        <!-- Working on getting the counter to work... -->
+                {% set count = namespace(a=0) %}
+                {% for user in all_users %}
+                    {% for liked_idea in user.liked_ideas %}
+                        {% if liked_idea.id == post.id %}
+                            {% set count.a = count.a + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
                 <div class="col-sm-5">
-                    <p><a href="/bright_ideas/{{post.id}}">Placeholder</a> like this idea.</p>
+                    <p><a href="/bright_ideas/{{post.id}}">{{count.a}}</a> like this idea.</p>
                 </div>
             </div>
         {% endfor %}
