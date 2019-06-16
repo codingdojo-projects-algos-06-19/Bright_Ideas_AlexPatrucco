@@ -48,10 +48,15 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-                <div class="post_box col-sm-6">{{post.content}}</div>
+                <div class="post_box col-sm-6">
+                    {{post.content}}
+                </div>
             </div>
             <div class="row like_bar">
                 <div class="col-sm-4">
+                    {% if user.id == post.author %}
+                        <a href="/delete/{{post.id}}">Delete</a>
+                    {% endif %}
                     {% if user.id != post.author %}
                         <a href="/like/{{post.id}}">Like</a>
                     {% endif %}

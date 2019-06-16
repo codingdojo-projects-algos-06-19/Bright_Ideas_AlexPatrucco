@@ -52,6 +52,13 @@ def like(id):
     else:
         return redirect('/')
 
+def delete(id):
+    if 'userid' in session:
+        Ideas.delete(id)
+        return redirect('/bright_ideas')
+    else:
+        return redirect('/')
+
 # User Profile
 
 def user_view(id):

@@ -137,4 +137,14 @@ class Ideas(db.Model):
             current_idea.users_who_liked.append(current_user)
             db.session.commit()
             flash("Idea liked!", "success")
-        
+    @classmethod
+    def delete(cls, id):
+        all_users = Users.query.all()
+        current_idea = cls.query.get(int(id))
+        for user in all_users:
+            for idea in user.liked_ideas:
+                if idea == current_idea:
+                    current_idea.users_who_liked.remove(user)
+        db.session.delete(current_idea)
+        db.session.commit()
+        flash("Idea deleted.", "info")
