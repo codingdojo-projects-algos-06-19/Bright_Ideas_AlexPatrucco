@@ -82,6 +82,15 @@ def user_view(id):
     else:
         return redirect('/')
 
+# Post View
+
+def idea_view(id):
+    if 'userid' in session:
+        all_posts = Ideas.query.all()
+        all_users = Users.query.all()
+        this_post = Ideas.query.get(int(id))
+
+        return render_template('idea_view.html', post=this_post, all_posts=all_posts, all_users=all_users)
 
 # Logout
 

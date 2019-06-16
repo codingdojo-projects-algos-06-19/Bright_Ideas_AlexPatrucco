@@ -9,6 +9,52 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    
+    <div class="row">
+        <div class="col-sm-12">
+            <nav class="navbar narbar-expand-lg navbar-dark bg-dark">
+                    <a class="navbar-brand" href="/bright_ideas">Bright Ideas</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                {% for user in all_users %}
+                    {% if user.id == post.author %}
+                        <p><a href="/users/{{user.id}}">{{user.alias}}</a> says: </p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="post_box col-sm-8">
+                {{post.content}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <h6>People who liked this post:</h6>
+                <table class="table table-dark table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Alias</th>
+                            <th scope="col">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in all_users %}
+                            {% for like in user.liked_ideas %}
+                                {% if like == post %}
+                                    <tr>
+                                        <td><a href="/users/{{user.id}}">{{user.alias}}</a></td>
+                                        <td>{{user.name}}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

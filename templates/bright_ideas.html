@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-sm-12">
             <nav class="navbar narbar-expand-lg navbar-dark bg-dark">
-                <a href="/bright_ideas" class="navbar-brand disabled">Hi {{user.alias}}!</a>
+                <a href="/bright_ideas" class="navbar-brand">Hi {{user.alias}}!</a>
                 <a href="/logout">Logout</a>
             </nav>
         </div>
@@ -70,7 +70,7 @@
                     {% endfor %}
                 {% endfor %}
                 <div class="col-sm-5">
-                    <p><a href="/bright_ideas/{{post.id}}">{{count.a}}</a> like this idea.</p>
+                    <p><a href="/bright_ideas/{{post.id}}">{{count.a}} people</a> like this idea.</p>
                 </div>
             </div>
         {% endfor %}

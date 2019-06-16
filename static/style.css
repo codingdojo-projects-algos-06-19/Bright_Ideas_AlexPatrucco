@@ -1,10 +1,11 @@
 .container {
     background-color: rgba(128, 128, 128, 0.151);
+    min-height: 1000px;
+    padding-top: 20px;
 }
 
 .post_box {
     padding: 5px 10px;
-    width: 350px;
     max-height: 250px;
     border: 2px solid rgba(38, 38, 148, 0.808);
     overflow: auto;
@@ -27,4 +28,12 @@
     margin: 20px 0px 20px 10px;
     border-bottom: 3px solid grey;
     font-weight: bold;
+}
+
+div table {
+    margin: 20px 0px 0px 30px;
+}
+
+div h6 {
+    margin-top: 50px;
 }
